@@ -1,11 +1,4 @@
-graph TD
-    %% Global Styling
-    classDef startEnd fill:#1e1e1e,stroke:#333,stroke-width:2px,color:#fff;
-    classDef question fill:#2b5c8f,stroke:#1e3f66,stroke-width:2px,color:#fff;
-    classDef reflection fill:#2e7d32,stroke:#1b5e20,stroke-width:2px,color:#fff;
-    classDef bridge fill:#6a1b9a,stroke:#4a148c,stroke-width:2px,color:#fff;
-    classDef decision fill:#d84315,stroke:#bf360c,stroke-width:2px,color:#fff;
-    classDef summary fill:#fbc02d,stroke:#f57f17,stroke-width:2px,color:#000;
+
 
     START([START]):::startEnd --> A0_OPEN[A0_OPEN: How did today feel?]:::question
     
