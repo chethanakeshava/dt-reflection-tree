@@ -1,0 +1,393 @@
+{
+  "meta": {
+    "version": "1.0",
+    "title": "The Daily Reflection Tree",
+    "axes": ["locus", "orientation", "radius"],
+    "description": "A deterministic end-of-day reflection tool across three psychological axes."
+  },
+  "nodes": [
+    {
+      "id": "START",
+      "parentId": null,
+      "type": "start",
+      "text": "Good evening. Before you close the day — let's look at it together. No right answers. Just honest ones.",
+      "next": "A0_OPEN"
+    },
+    {
+      "id": "A0_OPEN",
+      "parentId": "START",
+      "type": "question",
+      "text": "How did today feel from where you're sitting right now?",
+      "options": ["Drained but I got things done",
+       "Frustrated — things didn't go my way", 
+       "Energised — I was in the flow",
+        "Flat — nothing stood out"],
+      "next": "A0_DECISION"
+    },
+    {
+      "id": "A0_DECISION",
+      "parentId": "A0_OPEN",
+      "type": "decision",
+      "rules": [
+        { "match": ["Drained but I got things done", "Energised — I was in the flow"], "next": "A1_Q1_HIGH" },
+        { "match": ["Frustrated — things didn't go my way", "Flat — nothing stood out"], "next": "A1_Q1_LOW" }
+      ]
+      
+    },
+    {
+      "id": "A1_Q1_HIGH",
+      "parentId": "A0_DECISION",
+      "type": "question",
+      "text": "You said \"{A0_OPEN.answer}\". When something went well today, what do you think made it happen?",
+      "options": ["I prepared or thought it through beforehand", "I adapted when the situation shifted", "The team or someone else came through", "It just worked out — timing, luck"],
+      "rules": null,
+      "signal": null,
+      "next": "A1_D1_HIGH"
+    },
+    {
+      "id": "A1_Q1_LOW",
+      "parentId": "A0_DECISION",
+      "type": "question",
+      "text": "You said \"{A0_OPEN.answer}\". When something got hard today, what was your first move?",
+      "options": ["I looked for what I could still control", "I waited for things to settle or for help", "I pushed through on my own without a clear plan", "I felt stuck and wasn't sure what to do next"],
+      "rules": null,
+      "signal": null,
+      "next": "A1_D1_LOW"
+    },
+    {
+      "id": "A1_D1_HIGH",
+      "parentId": "A1_Q1_HIGH",
+      "type": "decision",
+      "text": null,
+      "options": null,
+      "rules": [
+        { "match": ["I prepared or thought it through beforehand", "I adapted when the situation shifted"], "next": "A1_Q2_INT", "signal": "axis1:internal" },
+        { "match": ["The team or someone else came through", "It just worked out — timing, luck"], "next": "A1_Q2_EXT", "signal": "axis1:external" }
+      ],
+      "signal": null,
+      "next": null
+    },
+    {
+      "id": "A1_D1_LOW",
+      "parentId": "A1_Q1_LOW",
+      "type": "decision",
+      "text": null,
+      "options": null,
+      "rules": [
+        { "match": ["I looked for what I could still control"], "next": "A1_Q2_INT", "signal": "axis1:internal" },
+        { "match": ["I waited for things to settle or for help", "I pushed through on my own without a clear plan", "I felt stuck and wasn't sure what to do next"], "next": "A1_Q2_EXT", "signal": "axis1:external" }
+      ],
+      "signal": null,
+      "next": null
+    },
+    {
+      "id": "A1_Q2_INT",
+      "parentId": null,
+      "type": "question",
+      "text": "Think about a specific moment today where things didn't go as planned. Looking back now, what was one choice you made — however small?",
+      "options": ["I chose how I responded, even if I didn't like the situation", "I chose to keep going rather than stop", "I chose to ask for help rather than struggle alone", "Honestly, I'm not sure I made a conscious choice"],
+      "rules": null,
+      "signal": null,
+      "next": "A1_D2"
+    },
+    {
+      "id": "A1_Q2_EXT",
+      "parentId": null,
+      "type": "question",
+      "text": "When things felt out of your hands today, how did that sit with you?",
+      "options": ["I accepted it and moved on to what I could influence", "I kept thinking about what should have been different", "I felt frustrated but didn't act on it", "I didn't really notice — I just kept going"],
+      "rules": null,
+      "signal": null,
+      "next": "A1_D2"
+    },
+    {
+      "id": "A1_D2",
+      "parentId": null,
+      "type": "decision",
+      "text": null,
+      "options": null,
+      "rules": [
+        { "condition": "axis1.dominant === 'internal'", "next": "A1_R_INT" },
+        { "condition": "axis1.dominant === 'external'", "next": "A1_R_EXT" }
+      ],
+      "signal": null,
+      "next": null
+    },
+    {
+      "id": "A1_R_INT",
+      "parentId": "A1_D2",
+      "type": "reflection",
+      "text": "You stayed in the driver's seat today — even when things got bumpy. That's not the same as controlling everything. It means you kept your hand on the wheel instead of climbing into the back seat. That's worth noticing.",
+      "options": null,
+      "rules": null,
+      "signal": "axis1:internal",
+      "next": "BRIDGE_1_2"
+    },
+    {
+      "id": "A1_R_EXT",
+      "parentId": "A1_D2",
+      "type": "reflection",
+      "text": "Today had a lot of pull from the outside — from other people, from circumstances, from things that just went sideways. That's real. And somewhere in all of that, you still made choices. Even waiting is a choice. Even frustration is a signal worth listening to.",
+      "options": null,
+      "rules": null,
+      "signal": "axis1:external",
+      "next": "BRIDGE_1_2"
+    },
+    {
+      "id": "BRIDGE_1_2",
+      "parentId": null,
+      "type": "bridge",
+      "text": "Now let's shift lenses — from how you handled what happened, to what you gave today.",
+      "options": null,
+      "rules": null,
+      "signal": null,
+      "next": "A2_OPEN"
+    },
+    {
+      "id": "A2_OPEN",
+      "parentId": "BRIDGE_1_2",
+      "type": "question",
+      "text": "Think about your interactions today. Which of these feels most true?",
+      "options": ["I helped someone with something beyond my usual scope", "I focused mostly on getting my own work done", "I felt I put in more than I got back today", "I did something useful that no one will probably notice"],
+      "rules": null,
+      "signal": null,
+      "next": "A2_DECISION"
+    },
+    {
+      "id": "A2_DECISION",
+      "parentId": "A2_OPEN",
+      "type": "decision",
+      "text": null,
+      "options": null,
+      "rules": [
+        { "match": ["I helped someone with something beyond my usual scope", "I did something useful that no one will probably notice"], "next": "A2_Q1_CONTRIB", "signal": "axis2:contribution" },
+        { "match": ["I focused mostly on getting my own work done", "I felt I put in more than I got back today"], "next": "A2_Q1_ENTITLE", "signal": "axis2:entitlement" }
+      ],
+      "signal": null,
+      "next": null
+    },
+    {
+      "id": "A2_Q1_CONTRIB",
+      "parentId": "A2_DECISION",
+      "type": "question",
+      "text": "You mentioned giving effort beyond your immediate role. When you did that, what was going through your mind?",
+      "options": ["I just saw something that needed doing and did it", "I knew it would help someone who was struggling", "I thought it was the right thing even if no one asked", "I hoped it would be noticed, honestly"],
+      "rules": null,
+      "signal": null,
+      "next": "A2_D1"
+    },
+    {
+      "id": "A2_Q1_ENTITLE",
+      "parentId": "A2_DECISION",
+      "type": "question",
+      "text": "You mentioned focusing inward today. Was there a moment where you wanted more — more recognition, support, or fairness?",
+      "options": ["Yes — I worked hard and it felt invisible", "Yes — someone else got credit that should've been shared", "Not really — I just had a lot on my plate", "I'm not sure. Maybe. It's complicated."],
+      "rules": null,
+      "signal": null,
+      "next": "A2_D1"
+    },
+    {
+      "id": "A2_D1",
+      "parentId": null,
+      "type": "decision",
+      "text": null,
+      "options": null,
+      "rules": [
+        { "condition": "axis2.dominant === 'contribution'", "next": "A2_Q2_CONTRIB" },
+        { "condition": "axis2.dominant === 'entitlement'", "next": "A2_Q2_ENTITLE" }
+      ],
+      "signal": null,
+      "next": null
+    },
+    {
+      "id": "A2_Q2_CONTRIB",
+      "parentId": "A2_D1",
+      "type": "question",
+      "text": "Was there a moment today where you could have done something for the team — and chose not to? Not a failure, just a choice.",
+      "options": ["Yes — I was too tired or stretched thin", "Yes — I wasn't sure it was my place", "Not really — I showed up where I could", "I didn't notice a moment like that"],
+      "rules": null,
+      "signal": null,
+      "next": "A2_R_CONTRIB"
+    },
+    {
+      "id": "A2_Q2_ENTITLE",
+      "parentId": "A2_D1",
+      "type": "question",
+      "text": "Is there something small you did today — not on anyone's radar — that you actually felt good about?",
+      "options": ["Yes, something I did quietly without being asked", "Not really — most of what I did was expected", "I'm trying to think of one... it's hard right now", "I did what was required and that's honest"],
+      "rules": null,
+      "signal": null,
+      "next": "A2_R_ENTITLE"
+    },
+    {
+      "id": "A2_R_CONTRIB",
+      "parentId": "A2_Q2_CONTRIB",
+      "type": "reflection",
+      "text": "You oriented toward giving today — not because someone tracked it, but because you saw what was needed. That kind of contribution doesn't show up in performance reviews. It shows up in the culture you're slowly building around you.",
+      "options": null,
+      "rules": null,
+      "signal": "axis2:contribution",
+      "next": "BRIDGE_2_3"
+    },
+    {
+      "id": "A2_R_ENTITLE",
+      "parentId": "A2_Q2_ENTITLE",
+      "type": "reflection",
+      "text": "Today your attention was more on what was owed than what was given. That's not a character flaw — it usually means you're running low on something: energy, recognition, or belonging. Worth sitting with that. And worth asking: was there one small thing you gave anyway?",
+      "options": null,
+      "rules": null,
+      "signal": "axis2:entitlement",
+      "next": "BRIDGE_2_3"
+    },
+    {
+      "id": "BRIDGE_2_3",
+      "parentId": null,
+      "type": "bridge",
+      "text": "One more shift — from what you gave, to who was in your awareness today.",
+      "options": null,
+      "rules": null,
+      "signal": null,
+      "next": "A3_OPEN"
+    },
+    {
+      "id": "A3_OPEN",
+      "parentId": "BRIDGE_2_3",
+      "type": "question",
+      "text": "When you think about your biggest challenge today, who came to mind as you were dealing with it?",
+      "options": ["Mostly just me — it was my challenge to solve", "My team — we're all affected by this", "A specific colleague who was struggling more than me", "The people we ultimately serve — customers or end users"],
+      "rules": null,
+      "signal": null,
+      "next": "A3_DECISION"
+    },
+    {
+      "id": "A3_DECISION",
+      "parentId": "A3_OPEN",
+      "type": "decision",
+      "text": null,
+      "options": null,
+      "rules": [
+        { "match": ["Mostly just me — it was my challenge to solve"], "next": "A3_Q1_SELF", "signal": "axis3:self" },
+        { "match": ["My team — we're all affected by this", "A specific colleague who was struggling more than me", "The people we ultimately serve — customers or end users"], "next": "A3_Q1_WIDE", "signal": "axis3:wide" }
+      ],
+      "signal": null,
+      "next": null
+    },
+    {
+      "id": "A3_Q1_SELF",
+      "parentId": "A3_DECISION",
+      "type": "question",
+      "text": "When your work went well today, who else benefited — even indirectly?",
+      "options": ["I hadn't thought about it that way", "Someone on my team, probably", "A customer or person downstream", "I'm honestly not sure how my work connects to others"],
+      "rules": null,
+      "signal": null,
+      "next": "A3_D1"
+    },
+    {
+      "id": "A3_Q1_WIDE",
+      "parentId": "A3_DECISION",
+      "type": "question",
+      "text": "When you thought about your team or others today, what did that feel like?",
+      "options": ["It made my own problem feel more manageable", "It made me want to do more than I initially planned", "It added to my stress — more to worry about", "It grounded me in why the work matters"],
+      "rules": null,
+      "signal": null,
+      "next": "A3_D1"
+    },
+    {
+      "id": "A3_D1",
+      "parentId": null,
+      "type": "decision",
+      "text": null,
+      "options": null,
+      "rules": [
+        { "condition": "axis3.dominant === 'self'", "next": "A3_Q2_SELF" },
+        { "condition": "axis3.dominant === 'wide'", "next": "A3_Q2_WIDE" }
+      ],
+      "signal": null,
+      "next": null
+    },
+    {
+      "id": "A3_Q2_SELF",
+      "parentId": "A3_D1",
+      "type": "question",
+      "text": "Is there one person — a colleague, a customer, someone downstream — whose day was shaped by something you did today?",
+      "options": ["Yes, now that I think about it — someone specific", "Probably, though I didn't think of them in the moment", "Not obviously — my work feels quite separate", "I'm not sure how to trace that connection"],
+      "rules": null,
+      "signal": null,
+      "next": "A3_R_SELF"
+    },
+    {
+      "id": "A3_Q2_WIDE",
+      "parentId": "A3_D1",
+      "type": "question",
+      "text": "Did thinking about others change anything about how you worked today — or just how you felt?",
+      "options": ["It changed what I prioritised", "It changed how I communicated", "It mostly changed how I felt — not what I did", "Both, I think"],
+      "rules": null,
+      "signal": null,
+      "next": "A3_R_WIDE"
+    },
+    {
+      "id": "A3_R_SELF",
+      "parentId": "A3_Q2_SELF",
+      "type": "reflection",
+      "text": "Today your frame of reference was mostly your own experience — which is natural when you're deep in it. But your work touches people. The connection is there even when it's invisible. Tomorrow: try to spot one person whose day your work will land on.",
+      "options": null,
+      "rules": null,
+      "signal": "axis3:self",
+      "next": "SUMMARY"
+    },
+    {
+      "id": "A3_R_WIDE",
+      "parentId": "A3_Q2_WIDE",
+      "type": "reflection",
+      "text": "You kept others in your frame today — not as a performance, but as an orientation. That's perspective-taking: holding your experience and someone else's at the same time. It's a muscle. Today you used it.",
+      "options": null,
+      "rules": null,
+      "signal": "axis3:wide",
+      "next": "SUMMARY"
+    },
+    {
+      "id": "SUMMARY",
+      "parentId": null,
+      "type": "summary",
+      "text": "Here's what today looks like from the outside:\n\nOn agency: you leaned {axis1.dominant} — {axis1.summary}.\nOn contribution: you leaned {axis2.dominant} — {axis2.summary}.\nOn perspective: your radius today was {axis3.dominant} — {axis3.summary}.\n\n{closing_reflection}",
+      "options": null,
+      "rules": null,
+      "signal": null,
+      "summaryTemplates": {
+        "axis1": {
+          "internal": "you saw your hand in what happened",
+          "external": "circumstances had a strong pull on you"
+        },
+        "axis2": {
+          "contribution": "you gave more than was asked",
+          "entitlement": "you were tracking what was owed to you"
+        },
+        "axis3": {
+          "wide": "you held others in your frame",
+          "self": "your own experience was the primary lens"
+        },
+        "closingReflections": {
+          "internal_contribution_wide": "You showed up fully today — with agency, generosity, and a wide view. That's not a small thing.",
+          "internal_contribution_self": "You owned your day and gave effort. Widening your view to include others is the next layer.",
+          "internal_entitlement_wide": "You held your agency and stayed aware of others — but somewhere in the middle, the focus shifted to what you deserved. That tension is worth exploring.",
+          "internal_entitlement_self": "You took ownership of your actions, but today's lens was narrow — on yourself and what you were owed. Agency without generosity is just efficiency.",
+          "external_contribution_wide": "Even when things felt out of your hands, you kept giving and stayed aware of others. That's quiet strength.",
+          "external_contribution_self": "You gave effort today even when the situation was pulling you around. Connecting that effort to the people it serves could give it more weight.",
+          "external_entitlement_wide": "Today was hard — things didn't go your way and others weren't carrying their load. You stayed aware of the bigger picture though. That matters.",
+          "external_entitlement_self": "Today felt heavy and mostly about what you were experiencing and what wasn't working for you. That's a signal worth paying attention to — what's running low?"
+        }
+      },
+      "next": "END"
+    },
+    {
+      "id": "END",
+      "parentId": "SUMMARY",
+      "type": "end",
+      "text": "Rest well. See you tomorrow.",
+      "options": null,
+      "rules": null,
+      "signal": null,
+      "next": null
+    }
+  ]
+}
